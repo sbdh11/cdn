@@ -1,12 +1,12 @@
 # Picture Vault
 
-A minimal image upload and delivery server built with Express and SQLite.
+Picture Vault is a minimal, lightweight image upload and delivery server built with Express and SQLite. Perfect for quickly hosting images with anonymous uploads and easy management. If you own a domain, Picture Vault can double as your personal image CDN.
 
 ## Features
 
 1. Anonymous uploads (no accounts).
 2. Per-file deletion via one-time deletion password.
-3. Batch upload and batch delete support.
+3. Batch upload support.
 4. Image listing, metadata lookup, and HEAD checks.
 5. Simple file-based storage with SQLite index.
 
@@ -44,13 +44,6 @@ The app serves a simple test UI at `/` and the API under `/images`.
 
 - GET `/images?limit=50&offset=0`
   - paginated listing; returns `{ total, limit, offset, items: [{ id, extn }] }`
-
-- POST `/images/delete`
-  - JSON body: `{ files: [{ id, password }] }` (batch delete)
-  - returns per-file status array
-
-- DELETE `/images/:id`
-  - JSON body: `{ password }` for single-file deletion
 
 ## Notes
 

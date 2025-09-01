@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html data-theme="dark">
 
 <head>
 	<link rel="stylesheet" href="css/index.css">
@@ -7,62 +7,77 @@
 	<meta
 		content="A minimal image uploading API"
 		property="og:description">
-	<meta content="https://cdn.discordapp.com/attachments/762643453137125420/1412059862321594388/images.png?ex=68b6eab9&is=68b59939&hm=9e3edf6daf068c41365cfbd0221efc55763bbaa4e13cc3db503144f81c105fed&" property="og:image">
+	<meta content="https://cdn.discordapp.com/attachments/1403077045487009805/1412060745092563145/temp-removebg.png?ex=68b6eb8c&is=68b59a0c&hm=cfe9c9ffdd54920f270866df07912c22039b3e7f450b47178fb475bd1a1bcc20&" property="og:image">
 	<meta name="theme-color" content="#0f1115">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Picture Vault</title>
-	<link class="favicon" rel="shortcut icon" type="icon/png" href="https://cdn.discordapp.com/attachments/762643453137125420/1412059862321594388/images.png?ex=68b6eab9&is=68b59939&hm=9e3edf6daf068c41365cfbd0221efc55763bbaa4e13cc3db503144f81c105fed&">
+	<link class="favicon" rel="shortcut icon" type="icon/png" href="https://cdn.discordapp.com/attachments/1403077045487009805/1412060745092563145/temp-removebg.png?ex=68b6eb8c&is=68b59a0c&hm=cfe9c9ffdd54920f270866df07912c22039b3e7f450b47178fb475bd1a1bcc20&">
 	<script src="https://unpkg.com/@motionone/dom/dist/motion.min.js" defer></script>
+	<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
 </head>
 
 <body>
 	<main class="pv-container">
 		<header class="hero">
+			<div class="hero-icon">
+				<i data-lucide="image"></i>
+			</div>
 			<h1>Picture Vault</h1>
-			<p>Upload, fetch, and delete images with ease.</p>
+			<p>Upload and fetch images with ease.</p>
 		</header>
 
-		<section id="upload" class="card">
-			<h2>Upload</h2>
-			<form method="POST" action="/images/add" id="imguploadform" enctype="multipart/form-data">
-				<label for="photos" class="dropzone" id="dropzone">
-					<input type="file" name="photos" id="photos" multiple>
-					<div class="dz-inner">
-						<div class="dz-icon">⬆</div>
-						<div class="dz-caption">Drop files here or click to upload</div>
-					</div>
-				</label>
-			</form>
-			<div class="code-window" id="imguploadresult">
-				<pre data-title="JSON result"><code></code></pre>
-			</div>
-		</section>
-
-		<section id="view" class="card">
-			<h2>Fetch</h2>
-			<div class="control-form inline">
-				<input type="text" id="photoid" placeholder="Enter photo ID">
-				<button id="imgget">Show image</button>
-			</div>
-			<div class="image-container" id="imggetresult">
-				<div class="title"></div>
-				<img src="" style="display: none" alt="">
-			</div>
-		</section>
-
-		<section id="delete" class="card">
-			<h2>Delete</h2>
-			<form method="POST" action="/images/delete">
-				<div class="delinputs"></div>
-				<div class="actions">
-					<button type="button" id="adddelinput">Add</button>
-					<button type="button" id="senddelrequest">Delete</button>
+		<div class="sections-grid">
+			<section id="upload" class="card">
+				<div class="card-header">
+					<i data-lucide="upload" class="card-icon"></i>
+					<h2>Upload Images</h2>
 				</div>
-			</form>
-			<div class="code-window" id="imgdeleteresult">
-				<pre data-title="JSON result"><code></code></pre>
-			</div>
-		</section>
+				<form method="POST" action="/images/add" id="imguploadform" enctype="multipart/form-data">
+					<label for="photos" class="dropzone" id="dropzone">
+						<input type="file" name="photos" id="photos" multiple>
+						<div class="dz-inner">
+							<div class="dz-icon">
+								<i data-lucide="cloud-upload"></i>
+							</div>
+							<div class="dz-caption">Drop files here or click to upload</div>
+							<div class="dz-hint">Supports PNG, JPG, GIF, WebP up to 5MB</div>
+						</div>
+					</label>
+				</form>
+				<div class="code-window" id="imguploadresult">
+					<div class="code-header">
+						<i data-lucide="code" class="code-icon"></i>
+						<span>JSON Response</span>
+					</div>
+					<pre><code></code></pre>
+				</div>
+			</section>
+
+			<section id="view" class="card">
+				<div class="card-header">
+					<i data-lucide="search" class="card-icon"></i>
+					<h2>Fetch Image</h2>
+				</div>
+				<div class="control-form inline">
+					<div class="input-wrapper">
+						<i data-lucide="hash" class="input-icon"></i>
+						<input type="text" id="photoid" placeholder="Enter photo ID">
+					</div>
+					<button id="imgget" class="btn-primary">
+						<i data-lucide="eye" class="btn-icon"></i>
+						Show Image
+					</button>
+				</div>
+				<div class="image-container" id="imggetresult">
+					<div class="image-placeholder">
+						<i data-lucide="image" class="placeholder-icon"></i>
+						<span>Image will appear here</span>
+					</div>
+					<div class="title"></div>
+					<img src="" style="display: none" alt="">
+				</div>
+			</section>
+		</div>
 	</main>
 
 	<div id="toast" class="toast" aria-live="polite" aria-atomic="true"></div>

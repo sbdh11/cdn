@@ -1,6 +1,6 @@
 {
   "name": "picture-vault",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "Minimal image upload and delivery server",
   "private": true,
   "type": "commonjs",
@@ -18,7 +18,6 @@
   ],
   "license": "UNLICENSED",
   "dependencies": {
-    "bcrypt": "^5.1.1",
     "express": "^4.19.2",
     "multer": "^1.4.5-lts.1",
     "sqlite3": "^5.1.7"

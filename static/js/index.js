@@ -5,11 +5,20 @@ function showToast(message) {
 	if (!toast) return;
 	toast.textContent = message;
 	toast.classList.add('show');
-	setTimeout(() => toast.classList.remove('show'), 2200);
+	setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+// Initialize Lucide icons
+function initIcons() {
+	if (window.lucide) {
+		lucide.createIcons();
+	}
 }
 
 // Animate cards on load
 window.addEventListener('DOMContentLoaded', () => {
+	initIcons();
+	
 	const cards = document.querySelectorAll('.card');
 	if (animate && cards.length) {
 		animate(cards, { opacity: [0, 1], transform: ["translateY(8px)", "translateY(0)"] }, { delay: stagger(0.08), duration: 0.5 });
@@ -19,76 +28,39 @@ window.addEventListener('DOMContentLoaded', () => {
 document.querySelector('#imgget').addEventListener('click', function () {
 	const img = document.querySelector('#imggetresult img');
 	const urlBox = document.querySelector('#imggetresult .title');
+	const placeholder = document.querySelector('#imggetresult .image-placeholder');
 	const input = document.querySelector('#photoid');
 	if (!img || !urlBox || !input) return;
-	const url = location.protocol + '//' + location.host + '/images/' + input.value;
-	img.src = url + '?random=' + Date.now();
-	img.style.display = 'block';
-	urlBox.innerHTML = url;
-	if (animate) animate(img, { opacity: [0, 1], transform: ["scale(.98)", "scale(1)"] }, { duration: 0.35 });
-});
-
-document.querySelector('#adddelinput').addEventListener('click', function (e) {
-	e.preventDefault();
-
-	const el = e.target.parentElement.querySelector('.delinputs');
-	if (!el) return;
-
-	const container = document.createElement('div');
-	container.classList.add('delitem');
-
-	const idInput = document.createElement('input');
-	idInput.setAttribute('type', 'text');
-	idInput.setAttribute('placeholder', 'Image ID');
-	idInput.classList.add('del-id-input');
-
-	const pwInput = document.createElement('input');
-	pwInput.setAttribute('type', 'text');
-	pwInput.setAttribute('placeholder', 'Deletion password');
-	pwInput.classList.add('del-pw-input');
-
-	const closeButton = document.createElement('div');
-	closeButton.classList.add('close-button');
-	closeButton.addEventListener('click', function () {
-		container.remove();
-	});
-
-	container.appendChild(idInput);
-	container.appendChild(pwInput);
-	container.appendChild(closeButton);
-
-	el.appendChild(container);
-	if (animate) animate(container, { opacity: [0, 1], transform: ["translateY(6px)", "translateY(0)"] }, { duration: 0.3 });
-});
-
-document.querySelector('#senddelrequest').addEventListener('click', function (e) {
-	const el = e.target.parentElement.querySelector('.delinputs');
-	if (!el) return;
-
-	const inputs = el.querySelectorAll('.delitem');
-
-	const request = { files: [] };
-
-	for (const input of inputs) {
-		request.files.push({
-			id: input.querySelector('.del-id-input').value,
-			password: input.querySelector('.del-pw-input').value
-		});
+	
+	const imageId = input.value.trim();
+	if (!imageId) {
+		showToast('Please enter an image ID');
+		return;
 	}
-
-	fetch('/images/delete', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify(request)
-		})
-		.then(data => data.json())
-		.then(obj => {
-			const code = document.querySelector('#imgdeleteresult code');
-			if (code) code.innerHTML = JSON.stringify(obj, null, 2);
-			showToast('Deletion request processed');
-		});
+	
+	const directUrl = location.protocol + '//' + location.host + '/images/' + imageId;
+	const embedUrl = location.protocol + '//' + location.host + '/images/' + imageId + '/embed';
+	
+	img.src = directUrl + '?random=' + Date.now();
+	img.style.display = 'block';
+	
+	// Create URL display with both direct and embed links
+	urlBox.innerHTML = `
+		<div style="margin-bottom: 10px;">
+			<strong>Direct Image:</strong><br>
+			<code style="background: hsl(var(--muted)); padding: 4px 8px; border-radius: 4px; font-size: 12px;">${directUrl}</code>
+		</div>
+		<div>
+			<strong>Embed URL (for Discord/Twitter):</strong><br>
+			<code style="background: hsl(var(--muted)); padding: 4px 8px; border-radius: 4px; font-size: 12px;">${embedUrl}</code>
+		</div>
+	`;
+	
+	if (placeholder) {
+		placeholder.style.display = 'none';
+	}
+	
+	if (animate) animate(img, { opacity: [0, 1], transform: ["scale(.98)", "scale(1)"] }, { duration: 0.35 });
 });
 
 document.querySelector('#imguploadform').addEventListener('submit', function (e) {
@@ -133,7 +105,22 @@ document.querySelector('#photos').addEventListener('change', function () {
 		.then(data => data.json())
 		.then(obj => {
 			const code = document.querySelector('#imguploadresult code');
-			if (code) code.innerHTML = JSON.stringify(obj, null, 2).trim();
+			if (code) {
+				// Format the response to show both direct and embed URLs
+				const formattedResponse = {
+					...obj,
+					files: obj.files.map(file => ({
+						...file,
+						directUrl: `${location.protocol}//${location.host}/images/${file.id}`,
+						embedUrl: `${location.protocol}//${location.host}/images/${file.id}/embed`
+					}))
+				};
+				code.innerHTML = JSON.stringify(formattedResponse, null, 2).trim();
+			}
 			showToast('Upload complete');
+		})
+		.catch(err => {
+			showToast('Error uploading files');
+			console.error(err);
 		});
 });
