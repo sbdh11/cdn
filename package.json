@@ -1,0 +1,32 @@
+{
+  "name": "picture-vault",
+  "version": "0.3.1",
+  "description": "Minimal image upload and delivery server",
+  "private": true,
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon --quiet index.js"
+  },
+  "keywords": [
+    "images",
+    "upload",
+    "api",
+    "express",
+    "sqlite"
+  ],
+  "license": "UNLICENSED",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "express": "^4.19.2",
+    "multer": "^1.4.5-lts.1",
+    "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

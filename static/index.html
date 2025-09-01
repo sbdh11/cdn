@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<link rel="stylesheet" href="css/index.css">
+	<meta property="og:site_name" content="Picture Vault">
+	<meta
+		content="A minimal image uploading API"
+		property="og:description">
+	<meta content="https://i.imgur.com/XZ2MEW5.png" property="og:image">
+	<meta name="theme-color" content="#0f1115">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Picture Vault</title>
+	<link class="favicon" rel="shortcut icon" type="icon/png" href="https://i.imgur.com/XZ2MEW5.png">
+	<script src="https://unpkg.com/@motionone/dom/dist/motion.min.js" defer></script>
+</head>
+
+<body>
+	<main class="pv-container">
+		<header class="hero">
+			<h1>Picture Vault</h1>
+			<p>Upload, fetch, and delete images with ease.</p>
+		</header>
+
+		<section id="upload" class="card">
+			<h2>Upload</h2>
+			<form method="POST" action="/images/add" id="imguploadform" enctype="multipart/form-data">
+				<label for="photos" class="dropzone" id="dropzone">
+					<input type="file" name="photos" id="photos" multiple>
+					<div class="dz-inner">
+						<div class="dz-icon">⬆</div>
+						<div class="dz-caption">Drop files here or click to upload</div>
+					</div>
+				</label>
+			</form>
+			<div class="code-window" id="imguploadresult">
+				<pre data-title="JSON result"><code></code></pre>
+			</div>
+		</section>
+
+		<section id="view" class="card">
+			<h2>Fetch</h2>
+			<div class="control-form inline">
+				<input type="text" id="photoid" placeholder="Enter photo ID">
+				<button id="imgget">Show image</button>
+			</div>
+			<div class="image-container" id="imggetresult">
+				<div class="title"></div>
+				<img src="" style="display: none" alt="">
+			</div>
+		</section>
+
+		<section id="delete" class="card">
+			<h2>Delete</h2>
+			<form method="POST" action="/images/delete">
+				<div class="delinputs"></div>
+				<div class="actions">
+					<button type="button" id="adddelinput">Add</button>
+					<button type="button" id="senddelrequest">Delete</button>
+				</div>
+			</form>
+			<div class="code-window" id="imgdeleteresult">
+				<pre data-title="JSON result"><code></code></pre>
+			</div>
+		</section>
+	</main>
+
+	<div id="toast" class="toast" aria-live="polite" aria-atomic="true"></div>
+	<script src="js/index.js"></script>
+</body>
+
+</html>
